@@ -12,9 +12,14 @@ const connection = mysql.createConnection({
 });
 
 
-inquirer.prompt([/* Pass your questions in here */], function( answers ) {
-    // Use user feedback for... whatever!!
-}); 
+inquirer.prompt([
+    {
+        
+    },
+])
+    .then((data) => {
+
+});
 
 
 
