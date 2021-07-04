@@ -1,6 +1,6 @@
 require('dotenv').config()
 const mysql      = require('mysql');
-
+const inquirer = require("inquirer");
 
 
 const connection = mysql.createConnection({
@@ -10,6 +10,16 @@ const connection = mysql.createConnection({
   password : process.env.DB_PASS,
   database : process.env.DB_NAME,
 });
+
+
+inquirer.prompt([/* Pass your questions in here */], function( answers ) {
+    // Use user feedback for... whatever!!
+}); 
+
+
+
+
+
 
 
 connection.connect((err) => {
