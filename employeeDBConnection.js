@@ -53,19 +53,19 @@ const readData = () => {
       if (data.view === 'Departments') {
         connection.query('SELECT * FROM department', (err, res) => {
           if (err) throw err;
-          console.log(res);
+          console.table(res);
           startApp();
         });
       } else if (data.view === 'Roles') {
         connection.query('SELECT * FROM role', (err, res) => {
           if (err) throw err;
-          console.log(res);
+          console.table(res);
           startApp();
         });
       } else if (data.view === 'Employees') {
         connection.query('SELECT * FROM employee', (err, res) => {
           if (err) throw err;
-          console.log(res);
+          console.table(res);
           startApp();
         });
       } else {
