@@ -49,7 +49,7 @@ const readData = () => {
       message: 'What would you like view?',
       choices: ['Departments', 'Roles', 'Employees', "Start Over"],
     }, ]).then((data) => {
-      
+
       if (data.view === 'Departments') {
         connection.query('SELECT * FROM department', (err, res) => {
           if (err) throw err;
@@ -72,33 +72,66 @@ const readData = () => {
         startApp();
       }
     });
+}
+
+// =====================================================================
+const writeData = () => {
+
+  inquirer.prompt([{
+        type: 'list',
+        name: 'writeWhat',
+        message: 'What would you like to create?',
+        choices: ['Role', 'Employee', 'Department', 'Start Over'],
+      },
+    ])
+    .then((data) => {
+
+      if (data.writeWhat === 'Department') {
+        newDepartment();
+      } else if (data.writeWhat === 'Role') {
+        newRole();
+      } else if (data.writeWhat === 'Employee ') {
+        newEmployee();
+      } else {
+        startApp();
+      }
+    });
+  // console.log('this is write test');
   // connection.end();
 }
 
 
+const newDepartment = () => {
 
-
-
-
-
-
-
-
-
-
-
-
-// =====================================================================
-const writeData = () => {
-  console.log('this is write test');
-  connection.end();
+  inquirer.prompt([{
+    type: 'input',
+    name: 'departmentName',
+    message: 'What is the name of the Department you would like to add?',
+  },
+])
+.then((data) => {
+  const query = 'INSERT INTO department (name) VALUE ?'; 
+  connection.query(query, {name: data.departmentName}, (err) => {
+    if (err) throw err;
+      // res.forEach(({ name }) =>{
+      //   console.table(`Name: ${name}`)
+      // });
+      console.table(`Name: ${name}`)
+  });
+}); 
 }
+
+const newRole = () => {}
+const newEmployee = () => {}
 
 // =====================================================================
 const updateData = () => {
   console.log('this is update test');
   connection.end();
 }
+
+
+
 
 // =====================================================================
 connection.connect((err) => {
