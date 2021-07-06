@@ -47,54 +47,32 @@ const readData = () => {
       name: 'view',
       type: 'list',
       message: 'What would you like view?',
-      choices: ['Departments', 'Roles', 'Employees', "EXIT"],
+      choices: ['Departments', 'Roles', 'Employees', "Start Over"],
     }, ]).then((data) => {
       
       if (data.view === 'Departments') {
         connection.query('SELECT * FROM department', (err, res) => {
           if (err) throw err;
           console.log(res);
-          connection.end();
+          startApp();
         });
       } else if (data.view === 'Roles') {
         connection.query('SELECT * FROM role', (err, res) => {
           if (err) throw err;
           console.log(res);
-          connection.end();
+          startApp();
         });
       } else if (data.view === 'Employees') {
         connection.query('SELECT * FROM employee', (err, res) => {
           if (err) throw err;
           console.log(res);
-          connection.end();
+          startApp();
         });
       } else {
-        connection.end();
+        startApp();
       }
-
-
-
-      // switch (data.view) {
-      //   case 'Departments':
-      //     console.log("here are the... departments");
-      //     connection.end();
-      //     break;
-      //   case 'Roles':
-      //     console.log("here are the... roles");
-      //     connection.end();
-      //     break;
-      //   case 'Employees':
-      //     console.log("here are the... employees");
-      //     connection.end();
-      //     break;
-      //   default:
-      //     connection.end();
-      //     break;
-      // }
-
-      
     });
-  connection.end();
+  // connection.end();
 }
 
 
