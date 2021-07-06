@@ -39,22 +39,90 @@ function startApp() {
     });
 };
 
-
+// =====================================================================
 const readData = () => {
-  console.log('this is read test');
+  inquirer
+    .prompt([{
+      // for Create, Read, Update
+      name: 'view',
+      type: 'list',
+      message: 'What would you like view?',
+      choices: ['Departments', 'Roles', 'Employees', "EXIT"],
+    }, ]).then((data) => {
+      
+      if (data.view === 'Departments') {
+        connection.query('SELECT * FROM department', (err, res) => {
+          if (err) throw err;
+          console.log(res);
+          connection.end();
+        });
+      } else if (data.view === 'Roles') {
+        connection.query('SELECT * FROM role', (err, res) => {
+          if (err) throw err;
+          console.log(res);
+          connection.end();
+        });
+      } else if (data.view === 'Employees') {
+        connection.query('SELECT * FROM employee', (err, res) => {
+          if (err) throw err;
+          console.log(res);
+          connection.end();
+        });
+      } else {
+        connection.end();
+      }
+
+
+
+      // switch (data.view) {
+      //   case 'Departments':
+      //     console.log("here are the... departments");
+      //     connection.end();
+      //     break;
+      //   case 'Roles':
+      //     console.log("here are the... roles");
+      //     connection.end();
+      //     break;
+      //   case 'Employees':
+      //     console.log("here are the... employees");
+      //     connection.end();
+      //     break;
+      //   default:
+      //     connection.end();
+      //     break;
+      // }
+
+      
+    });
   connection.end();
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// =====================================================================
 const writeData = () => {
   console.log('this is write test');
   connection.end();
 }
 
+// =====================================================================
 const updateData = () => {
   console.log('this is update test');
   connection.end();
 }
 
+// =====================================================================
 connection.connect((err) => {
   if (err) throw err;
   console.log(`connected as id ${connection.threadId}`);
