@@ -1,3 +1,4 @@
+-- schema
 DROP DATABASE IF EXISTS employeeDB;
 
 CREATE DATABASE employeeDB;
@@ -26,8 +27,8 @@ CREATE TABLE employee (
     PRIMARY KEY (id)
 );
 
---Hardcoding some data for the databasse
 
+--Hardcoding some seed data for the database
 INSERT INTO department (name)
 VALUES ("Education");
 
