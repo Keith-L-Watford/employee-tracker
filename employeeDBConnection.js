@@ -19,7 +19,7 @@ function startApp() {
       name: 'cru',
       type: 'list',
       message: 'What would you like to do?',
-      choices: ['View Existing', 'Create New', 'Update Current', "EXIT"],
+      choices: ['View Existing Departments, Roles & Employees', 'Create New Department, Role or Employee', 'Update Employee Info', "EXIT"],
     }, ]).then((data) => {
 
       switch (data.cru) {
@@ -30,7 +30,7 @@ function startApp() {
           writeData();
           break;
         case 'Update Current':
-          updateData();
+          updateEmployeeData();
           break;
         default:
           connection.end();
@@ -75,7 +75,7 @@ const readData = () => {
         default:
           startApp();
           break;
-        }
+      }
     });
 }
 
@@ -105,8 +105,6 @@ const writeData = () => {
           break;
       }
     });
-  // console.log('this is write test');
-  // connection.end();
 }
 
 const newDepartment = () => {
@@ -208,9 +206,34 @@ const newEmployee = () => {
 }
 
 // =====================================================================
-const updateData = () => {
-  console.log('this is update test');
-  connection.end();
+const updateEmployeeData = () => {
+
+  connection.query('SELECT * FROM employee', (err, res) => {
+    if (err) throw err;
+
+    inquirer
+      .prompt([{
+        // for Create, Read, Update
+        name: 'updatedEmployee',
+        type: 'list',
+        message: 'Which employee would you like to update?',
+        choices() {
+          const employeeArray = [];
+          res.forEach(({
+            first_name, last_name
+          }) => {
+            employeeArray.push(first_name, last_name);
+          });
+          return employeeArray;
+        },
+      }, ]).then((data) => {
+
+
+      });
+
+  })
+  // console.log('this is update test');
+  // connection.end();
 }
 
 
@@ -219,7 +242,7 @@ const updateData = () => {
 // =====================================================================
 connection.connect((err) => {
   if (err) throw err;
-  console.log(`connected as id ${connection.threadId}`);
+  // console.log(`connected as id ${connection.threadId}`);
   // connection.end();
   startApp();
 });
