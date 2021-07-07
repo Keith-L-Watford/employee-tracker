@@ -214,7 +214,7 @@ const updateEmployeeData = () => {
 
     let employeeArray = [];
     results.forEach((employee) => {
-      employeeArray.push(employee.first_name)
+      employeeArray.push(employee.first_name + " "+ employee.last_name)
     })
 
 
@@ -222,7 +222,7 @@ const updateEmployeeData = () => {
       .prompt([{
         // for Create, Read, Update
         name: 'updatedEmployee',
-        type: 'rawlist',
+        type: 'list',
         message: 'Which employee would you like to update?',
         choices: employeeArray,
       }, ]).then((data) => {
