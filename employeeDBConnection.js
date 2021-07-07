@@ -212,24 +212,23 @@ const updateEmployeeData = () => {
     connection.query('SELECT * FROM employee', (err, results) => {
     if (err) throw err;
 
+    let employeeArray = [];
+    results.forEach((employee) => {
+      employeeArray.push(employee.first_name)
+    })
+
+
     inquirer
       .prompt([{
         // for Create, Read, Update
         name: 'updatedEmployee',
         type: 'rawlist',
         message: 'Which employee would you like to update?',
-        choices() {
-          const employeeArray = [];
-          results.forEach(({
-            employee
-          }) => {
-            employeeArray.push(employee);
-          });
-          return employeeArray;
-        },
+        choices: employeeArray,
       }, ]).then((data) => {
 
-
+        console.table(data)
+        connection.end();
       });
 
   })
