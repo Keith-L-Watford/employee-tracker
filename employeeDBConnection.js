@@ -89,7 +89,7 @@ const writeData = () => {
         newDepartment();
       } else if (data.writeWhat === 'Role') {
         newRole();
-      } else if (data.writeWhat === 'Employee ') {
+      } else if (data.writeWhat === 'Employee') {
         newEmployee();
       } else {
         startApp();
@@ -127,6 +127,13 @@ const newRole = () => {
       type: 'number',
       name: 'salary',
       message: 'What is the salary of that Role?',
+      validate(value) {
+        if (isNaN(value) === false) {
+          return true;
+        }
+        console.log(" <- That isn't a number. Please enter a number.");
+        return false;
+      },
     }, ])
     .then((data) => {
       const query = 'INSERT INTO role SET ?';
@@ -140,7 +147,55 @@ const newRole = () => {
     });
 }
 
-const newEmployee = () => {}
+const newEmployee = () => {
+  inquirer.prompt([{
+    type: 'input',
+    name: 'firstName',
+    message: "What is the employee's first name?",
+  },
+  {
+    type: 'input',
+    name: 'lastName',
+    message: "What is the employee's last name?",
+  }, 
+  {
+    type: 'number',
+    name: 'employeeID',
+    message: "What is the employee's ID number?",
+    validate(value) {
+      if (isNaN(value) === false) {
+        return true;
+      }
+      console.log(" <- That isn't a number. Please enter a number.");
+      return false;
+    },
+  },
+  {
+    type: 'input',
+    name: 'managerID',
+    message: "What is the their manager's ID number?",
+    validate(value) {
+      if (isNaN(value) === false) {
+        return true;
+      }
+      console.log(" <- That isn't a number. Please enter a number.");
+      return false;
+    },
+  },
+])
+  .then((data) => {
+    const query = 'INSERT INTO employee SET ?';
+    connection.query(query, {
+      first_name: data.firstName,
+      last_name: data.lastName,
+      role_id: data.employeeID,
+      manager_id: data.managerID, 
+    }, (err) => {
+      if (err) throw err;
+      startApp();
+    });
+  });
+}
 
 // =====================================================================
 const updateData = () => {
