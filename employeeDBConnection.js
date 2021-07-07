@@ -1,7 +1,7 @@
 require('dotenv').config()
 const mysql = require('mysql');
 const inquirer = require("inquirer");
-// const cTable = require('console.table');
+const cTable = require('console.table');
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -23,13 +23,13 @@ function startApp() {
     }, ]).then((data) => {
 
       switch (data.cru) {
-        case 'View Existing':
+        case 'View Existing Departments, Roles & Employees':
           readData();
           break;
-        case 'Create New':
+        case 'Create New Department, Role or Employee':
           writeData();
           break;
-        case 'Update Current':
+        case 'Update Employee Info':
           updateEmployeeData();
           break;
         default:
@@ -208,21 +208,22 @@ const newEmployee = () => {
 // =====================================================================
 const updateEmployeeData = () => {
 
-  connection.query('SELECT * FROM employee', (err, res) => {
+  // connection.query('SELECT first_name, last_name FROM employee', (err, res) => {
+    connection.query('SELECT * FROM employee', (err, results) => {
     if (err) throw err;
 
     inquirer
       .prompt([{
         // for Create, Read, Update
         name: 'updatedEmployee',
-        type: 'list',
+        type: 'rawlist',
         message: 'Which employee would you like to update?',
         choices() {
           const employeeArray = [];
-          res.forEach(({
-            first_name, last_name
+          results.forEach(({
+            employee
           }) => {
-            employeeArray.push(first_name, last_name);
+            employeeArray.push(employee);
           });
           return employeeArray;
         },
@@ -242,7 +243,7 @@ const updateEmployeeData = () => {
 // =====================================================================
 connection.connect((err) => {
   if (err) throw err;
-  // console.log(`connected as id ${connection.threadId}`);
+  console.log(`connected as id ${connection.threadId}`);
   // connection.end();
   startApp();
 });
