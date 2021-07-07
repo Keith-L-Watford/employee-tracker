@@ -110,13 +110,14 @@ const newDepartment = () => {
   },
 ])
 .then((data) => {
-  const query = 'INSERT INTO department (name) VALUE ?'; 
+  const query = 'INSERT INTO department SET ?'; 
   connection.query(query, {name: data.departmentName}, (err) => {
     if (err) throw err;
       // res.forEach(({ name }) =>{
       //   console.table(`Name: ${name}`)
       // });
-      console.table(`Name: ${name}`)
+      // console.table(`Name: ${name}`);
+      startApp();
   });
 }); 
 }
