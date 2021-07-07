@@ -78,12 +78,11 @@ const readData = () => {
 const writeData = () => {
 
   inquirer.prompt([{
-        type: 'list',
-        name: 'writeWhat',
-        message: 'What would you like to create?',
-        choices: ['Role', 'Employee', 'Department', 'Start Over'],
-      },
-    ])
+      type: 'list',
+      name: 'writeWhat',
+      message: 'What would you like to create?',
+      choices: ['Role', 'Employee', 'Department', 'Start Over'],
+    }, ])
     .then((data) => {
 
       if (data.writeWhat === 'Department') {
@@ -102,27 +101,45 @@ const writeData = () => {
 
 
 const newDepartment = () => {
-
   inquirer.prompt([{
-    type: 'input',
-    name: 'departmentName',
-    message: 'What is the name of the Department you would like to add?',
-  },
-])
-.then((data) => {
-  const query = 'INSERT INTO department SET ?'; 
-  connection.query(query, {name: data.departmentName}, (err) => {
-    if (err) throw err;
-      // res.forEach(({ name }) =>{
-      //   console.table(`Name: ${name}`)
-      // });
-      // console.table(`Name: ${name}`);
-      startApp();
-  });
-}); 
+      type: 'input',
+      name: 'departmentName',
+      message: 'What is the name of the Department you would like to add?',
+    }, ])
+    .then((data) => {
+      const query = 'INSERT INTO department SET ?';
+      connection.query(query, {
+        name: data.departmentName
+      }, (err) => {
+        if (err) throw err;
+        startApp();
+      });
+    });
 }
 
-const newRole = () => {}
+const newRole = () => {
+  inquirer.prompt([{
+      type: 'input',
+      name: 'roleName',
+      message: 'What is the name of the Role you would like to add?',
+    },
+    {
+      type: 'number',
+      name: 'salary',
+      message: 'What is the salary of that Role?',
+    }, ])
+    .then((data) => {
+      const query = 'INSERT INTO role SET ?';
+      connection.query(query, {
+        title: data.roleName,
+        salary: data.salary,
+      }, (err) => {
+        if (err) throw err;
+        startApp();
+      });
+    });
+}
+
 const newEmployee = () => {}
 
 // =====================================================================
