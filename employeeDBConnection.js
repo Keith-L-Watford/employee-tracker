@@ -50,27 +50,32 @@ const readData = () => {
       choices: ['Departments', 'Roles', 'Employees', "Start Over"],
     }, ]).then((data) => {
 
-      if (data.view === 'Departments') {
-        connection.query('SELECT * FROM department', (err, res) => {
-          if (err) throw err;
-          console.table(res);
+      switch (data.view) {
+        case 'Departments':
+          connection.query('SELECT * FROM department', (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            startApp();
+          });
+          break;
+        case 'Roles':
+          connection.query('SELECT * FROM role', (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            startApp();
+          });
+          break;
+        case 'Employees':
+          connection.query('SELECT * FROM employee', (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            startApp();
+          });
+          break;
+        default:
           startApp();
-        });
-      } else if (data.view === 'Roles') {
-        connection.query('SELECT * FROM role', (err, res) => {
-          if (err) throw err;
-          console.table(res);
-          startApp();
-        });
-      } else if (data.view === 'Employees') {
-        connection.query('SELECT * FROM employee', (err, res) => {
-          if (err) throw err;
-          console.table(res);
-          startApp();
-        });
-      } else {
-        startApp();
-      }
+          break;
+        }
     });
 }
 
@@ -81,24 +86,28 @@ const writeData = () => {
       type: 'list',
       name: 'writeWhat',
       message: 'What would you like to create?',
-      choices: ['Role', 'Employee', 'Department', 'Start Over'],
+      choices: ['Department', 'Role', 'Employee', "Start Over"],
     }, ])
     .then((data) => {
 
-      if (data.writeWhat === 'Department') {
-        newDepartment();
-      } else if (data.writeWhat === 'Role') {
-        newRole();
-      } else if (data.writeWhat === 'Employee') {
-        newEmployee();
-      } else {
-        startApp();
+      switch (data.writeWhat) {
+        case 'Department':
+          newDepartment();
+          break;
+        case 'Role':
+          newRole();
+          break;
+        case 'Employee':
+          newEmployee();
+          break;
+        default:
+          startApp();
+          break;
       }
     });
   // console.log('this is write test');
   // connection.end();
 }
-
 
 const newDepartment = () => {
   inquirer.prompt([{
@@ -119,22 +128,23 @@ const newDepartment = () => {
 
 const newRole = () => {
   inquirer.prompt([{
-      type: 'input',
-      name: 'roleName',
-      message: 'What is the name of the Role you would like to add?',
-    },
-    {
-      type: 'number',
-      name: 'salary',
-      message: 'What is the salary of that Role?',
-      validate(value) {
-        if (isNaN(value) === false) {
-          return true;
-        }
-        console.log(" <- That isn't a number. Please enter a number.");
-        return false;
+        type: 'input',
+        name: 'roleName',
+        message: 'What is the name of the Role you would like to add?',
       },
-    }, ])
+      {
+        type: 'number',
+        name: 'salary',
+        message: 'What is the salary of that Role?',
+        validate(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          console.log(" <- That isn't a number. Please enter a number.");
+          return false;
+        },
+      },
+    ])
     .then((data) => {
       const query = 'INSERT INTO role SET ?';
       connection.query(query, {
@@ -149,52 +159,52 @@ const newRole = () => {
 
 const newEmployee = () => {
   inquirer.prompt([{
-    type: 'input',
-    name: 'firstName',
-    message: "What is the employee's first name?",
-  },
-  {
-    type: 'input',
-    name: 'lastName',
-    message: "What is the employee's last name?",
-  }, 
-  {
-    type: 'number',
-    name: 'employeeID',
-    message: "What is the employee's ID number?",
-    validate(value) {
-      if (isNaN(value) === false) {
-        return true;
-      }
-      console.log(" <- That isn't a number. Please enter a number.");
-      return false;
-    },
-  },
-  {
-    type: 'input',
-    name: 'managerID',
-    message: "What is the their manager's ID number?",
-    validate(value) {
-      if (isNaN(value) === false) {
-        return true;
-      }
-      console.log(" <- That isn't a number. Please enter a number.");
-      return false;
-    },
-  },
-])
-  .then((data) => {
-    const query = 'INSERT INTO employee SET ?';
-    connection.query(query, {
-      first_name: data.firstName,
-      last_name: data.lastName,
-      role_id: data.employeeID,
-      manager_id: data.managerID, 
-    }, (err) => {
-      if (err) throw err;
-      startApp();
+        type: 'input',
+        name: 'firstName',
+        message: "What is the employee's first name?",
+      },
+      {
+        type: 'input',
+        name: 'lastName',
+        message: "What is the employee's last name?",
+      },
+      {
+        type: 'number',
+        name: 'employeeID',
+        message: "What is the employee's ID number?",
+        validate(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          console.log(" <- That isn't a number. Please enter a number.");
+          return false;
+        },
+      },
+      {
+        type: 'input',
+        name: 'managerID',
+        message: "What is the their manager's ID number?",
+        validate(value) {
+          if (isNaN(value) === false) {
+            return true;
+          }
+          console.log(" <- That isn't a number. Please enter a number.");
+          return false;
+        },
+      },
+    ])
+    .then((data) => {
+      const query = 'INSERT INTO employee SET ?';
+      connection.query(query, {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        role_id: data.employeeID,
+        manager_id: data.managerID,
+      }, (err) => {
+        if (err) throw err;
+        startApp();
+      });
     });
-  });
 }
 
 // =====================================================================
