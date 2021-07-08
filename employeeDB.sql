@@ -15,8 +15,8 @@ CREATE TABLE role (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(30) NOT NULL,-- role title
     salary INT(10) NOT NULL,-- hold role's salary
-    department_id INT NOT NULL,
-    CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id), 
+    -- department_id INT NOT NULL,
+    -- CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id), 
     PRIMARY KEY (id)
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE employee (
     first_name VARCHAR(30) NOT NULL, -- employee's first name
     last_name VARCHAR(30) NOT NULL, -- employee's last name
     role_id INT NOT NULL, -- employee's assigned ID number
-    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES department(id), 
+    -- CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES department(id), 
     manager_id INT NOT NULL, -- the employee's Mananger's assigned ID number
     PRIMARY KEY (id)
 );
