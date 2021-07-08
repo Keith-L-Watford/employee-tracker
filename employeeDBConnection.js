@@ -167,9 +167,10 @@ const newEmployee = () => {
         message: "What is the employee's last name?",
       },
       {
-        type: 'number',
+        type: 'rawlist',
         name: 'employeeID',
-        message: "What is the employee's ID number?",
+        message: "What is the employee's role ID number?",
+        choices: roleArray,
         validate(value) {
           if (isNaN(value) === false) {
             return true;
@@ -209,34 +210,65 @@ const newEmployee = () => {
 const updateEmployeeData = () => {
 
   // connection.query('SELECT first_name, last_name FROM employee', (err, res) => {
-    connection.query('SELECT * FROM employee', (err, results) => {
+  connection.query('SELECT * FROM employee', (err, results) => {
     if (err) throw err;
 
     let employeeArray = [];
     results.forEach((employee) => {
-      employeeArray.push(employee.first_name + " "+ employee.last_name)
-    })
+      employeeArray.push(employee.first_name + " " + employee.last_name)
+    });
 
+    connection.query('SELECT * FROM role', (err, results) => {
+      if (err) throw err;
 
-    inquirer
-      .prompt([{
-        // for Create, Read, Update
-        name: 'updatedEmployee',
-        type: 'list',
-        message: 'Which employee would you like to update?',
-        choices: employeeArray,
-      }, ]).then((data) => {
-
-        console.table(data)
-        connection.end();
+      let roleArray = [];
+      results.forEach((role) => {
+        roleArray.push(role.id + " " + role.title)
       });
+      // console.log(employeeArray);
 
-  })
-  // console.log('this is update test');
-  // connection.end();
+      inquirer
+        .prompt([{
+            // for Create, Read, Update
+            name: 'updatedEmployee',
+            type: 'list',
+            message: 'Which employee would you like to update?',
+            choices: employeeArray,
+          },
+          // {
+          //   name: 'roleTitle',
+          //   type: 'input',
+          //   message: 'What would you like to change their role to?',
+          //   choices: roleArray,
+          // },
+        ]).then((updatedEmployee, roleTitle) => {
+
+          // const allEmployees = connection.query('SELECT * FROM employee');
+
+          connection.query(
+            'UPDATE employee (role_id) SET ? WHERE ? AND ? ',
+            [{
+                new_id: roleTitle.id,
+              },
+              {
+                first_name: updatedEmployee.first_name,
+                last_name: updatedEmployee.last_name,
+              },
+            ],
+            (error) => {
+              if (error) throw err;
+              console.log('Bid placed successfully!');
+              start();
+            }
+          );
+          // console.log(data)
+          // console.table(data)
+          // connection.end();
+          startApp();
+        });
+    });
+  });
 }
-
-
 
 
 // =====================================================================
